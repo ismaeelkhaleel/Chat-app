@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
+      #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
+      #input:focus { outline: none; }
+      #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
+
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages > li { padding: 0.5rem 1rem; }
+      #messages > li:nth-child(odd) { background: #efefef; }
+    </style>
+</head>
+<body>
+    <div class="maincontainer">
+      <!-- upper section -->
+        <div class="topbuttons">
+        <p>Chat</p>
+        <div class="social-media-icons">
+            
+            <img src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp" class="icon facebook">
+            
+            <img src="https://img-cdn.pixlr.com/image-generator/history/65ba5701b4f4f4419f746bc3/806ecb58-167c-4d20-b658-a6a6b2f221e9/medium.webp" class="icon twitter">
+           
+            <img src="https://thumbs.dreamstime.com/blog/2023/03/ai-generated-art-real-art-my-two-cents-87048-image271553088.jpg" class="icon instagram">
+            
+            <img src="https://opendream.ai/assets/img/page/homepage-anime-2.png?v=4.2.7" class="icon linkedin">
+            
+            <img src="https://images.nightcafe.studio/jobs/J6J3IGSl4ukftiSZITVO/J6J3IGSl4ukftiSZITVO--1--ru9fh.jpg?tr=w-1600,c-at_max" class="icon youtube">
+          </div>
+       </div>
+
+      <div class="secondcontainer">
+            
+         <form class="form">
+          <label for="search">
+          <input required="" autocomplete="off" placeholder="search your chats" id="search" type="text">
+           <div class="back">
+             <svg stroke-width="2" stroke="currentColor" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="swap-on">
+                 <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linejoin="round" stroke-linecap="round"></path>
+             </svg>
+             <svg stroke-width="2" stroke="currentColor" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="swap-off">
+                <path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linejoin="round" stroke-linecap="round"></path>
+            </svg>
+          </div>
+          <button type="reset" class="close-btn">
+            <svg viewBox="0 0 20 20" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg">
+                <path clip-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" fill-rule="evenodd"></path>
+            </svg>
+        </button>
+    </label>
+</form>    
+            <hr>  
+        
+            <div class="chatBox">
+                <img src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp" class="Chaticon">
+                <p class="userName"><%= name %></p>
+            </div>
+
+            <!-- <hr> -->
+
+           <div class="overflow">
+            <div class="chat-container"> </div>
+          </div>
+          
+    </div>
+
+    <div class="messagebox">
+      <input type="text" name="messages" id="messageInput" placeholder="your message">
+       <button id="submitButton"><svg width="15" height="15" viewBox="0 0 15 15"><path d="M1.20308 1.04312C1.00481 0.954998 0.772341 1.0048 0.627577 1.16641C0.482813 1.32802 0.458794 1.56455 0.568117 1.75196L3.92115 7.50002L0.568117 13.2481C0.458794 13.4355 0.482813 13.672 0.627577 13.8336C0.772341 13.9952 1.00481 14.045 1.20308 13.9569L14.7031 7.95693C14.8836 7.87668 15 7.69762 15 7.50002C15 7.30243 14.8836 7.12337 14.7031 7.04312L1.20308 1.04312ZM4.84553 7.10002L2.21234 2.586L13.2689 7.50002L2.21234 12.414L4.84552 7.90002H9C9.22092 7.90002 9.4 7.72094 9.4 7.50002C9.4 7.27911 9.22092 7.10002 9 7.10002H4.84553Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path></svg></button>
+     </div>
+
+</div>
+
+<!-- client side code  -->
+r
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+
+  // setting up the toaster
+
+  toastr.options = {
+    timeOut: 2000,
+    positionClass: 'toast-bottom-right'
+  }
+
+  // getting the message from the user 
+
+  let messageArea = document.querySelector('.chat-container');
+
+  $(document).ready(function() {
+    $('#submitButton').click(function() {
+        // Get the value from the input box
+        let message = $('#messageInput').val();
+
+        // Optional: Display the message somewhere or log it
+        console.log("Message Submitted: " + message);
+        sendMessage(message);
+      });
+    });
+
+
+    // sending the messasge.
+
+    function sendMessage(message){
+      let msg = {
+       message: message.trim()
+      }
+
+      appendMessage(msg, 'sender');
+      messageArea.value = '';
+
+      // send messgae to the socket server
+      socket.emit('message', msg);
+    }
+
+
+    function appendMessage(msg, type){
+        let mainDiv = document.createElement('div');
+        let className = type;
+        mainDiv.classList.add(className, 'chat-message');
+
+        let markUp = `
+        <p>${msg.message}</p>
+        `
+
+        mainDiv.innerHTML = markUp;
+        messageArea.appendChild(mainDiv);
+    }
+
+
+    socket.on('message', (msg) => {
+      appendMessage(msg, 'receiver');
+    });
+
+  
+  socket.on("connect", () => {
+      console.log("connected", socket.id);
+    });
+  
+    socket.on("welcome", (s)=> {
+      console.log(s);
+    });
+</script>
+</body>
+</html>
